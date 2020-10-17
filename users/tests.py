@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from .views import *
+from unittest.mock import MagicMock, patch
+
+#from django_mock_queries.query import MockSet, MockModel
 
 class CustomUserTests(TestCase):
     def test_create_user(self):
@@ -66,3 +69,11 @@ class AuthenticationTest(TestCase):
     
     def test_check_duplicate_email(self):
         self.assertEqual(check_duplicate_username("invesntado@gmail.com"), False)
+        
+    def test_mock_create_user(self):
+        with patch('users.models.CustomUser') as user_patch:
+            mock_cp = MagicMock(spec=UsersListView)
+            mock_cp.model.username = "HenryLeon"
+            mock_cp.model.email = "henrisco@email.com"
+            self.assertEqual(mock_cp.model.username, "HenryLeon")
+            self.assertEqual(mock_cp.model.email, 'henrisco@email.com')

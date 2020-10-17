@@ -3,13 +3,16 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import CustomUser
 from .forms import UserForm
 from django.http import HttpResponse
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.template.loader import get_template
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
 from django.contrib.auth import get_user_model
 from django.contrib import messages
 
+class UsersListView(ListView):
+    model = CustomUser
+    template_name = 'home.html'
 
 # Create your views here.
 def signUp(request):
