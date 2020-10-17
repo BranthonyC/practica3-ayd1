@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from .views import *
 
 class CustomUserTests(TestCase):
     def test_create_user(self):
@@ -60,3 +61,5 @@ class AuthenticationTest(TestCase):
         self.assertNotIn('°', check_user.email)
         self.assertNotIn('"', check_user.email)
 
+    def test_check_duplicate_username(self):
+        self.assertEqual(check_duplicate_username("Henry"), True)

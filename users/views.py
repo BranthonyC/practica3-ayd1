@@ -40,3 +40,8 @@ def signUp(request):
 def check_username(username):
     users=CustomUser.objects.get(username=username)
     return users
+
+def check_duplicate_username(username):
+    if CustomUser.objects.filter(username=username).exists():
+        return True
+    return False
