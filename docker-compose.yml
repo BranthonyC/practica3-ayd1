@@ -10,6 +10,12 @@ services:
             - 8000:8000
         depends_on: 
             - db
+        environment:
+            - EMAIL_USE_SSL=True
+            - EMAIL_PORT=465
+            - EMAIL_HOST_PASSWORD=4mxctMcfLN7UvG3
+            - EMAIL_HOST_USER=sysbodega1@gmail.com
+            - EMAIL_HOST=smtp.gmail.com
     db:
         image: postgres
         volumes:
