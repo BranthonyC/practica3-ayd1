@@ -6,7 +6,7 @@
 {% block content %}
   <h1>Homepage</h1>
   {% if user.is_authenticated %}
-    <p>Hi {{ user.email }}!</p>
+    <p>Hi {{ user.first_name }} {{user.last_name}}!</p>
     
   {% else %}
     <p>You are not logged in</p>

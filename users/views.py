@@ -5,25 +5,27 @@ from .forms import UserForm
 from django.http import HttpResponse
 from django.views.generic import View
 from django.template.loader import get_template
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as do_login
+
 
 
 # Create your views here.
 def signUp(request):
-    print("Holaa")
     form = UserForm(request.POST)
-    #if request.method == 'POST':
     if form.is_valid():
-        print("Si entro")
-        form.save()
-        #return redirect('pages:listado_pacientes')
-        users=CustomUser.objects.all()
-        data={
-            'users_list':users
-        }
-        print("SIIIIIIIIUUUUUUUUUUUUU")
+        user = form.save()
+
+        #variables para usarlas posteriormente en el login.
+        '''
+        username = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(username=username, password=password)'''
+
+        #Para que loguear luedo de su creación.
+        do_login(request, user)
         return redirect('home')
 
     else:
-        print("NOOOOOOOOOOOOOOOO")
         form = UserForm()
     return render(request, 'account/signup.html', {'form': form})
