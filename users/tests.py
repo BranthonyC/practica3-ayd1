@@ -1,5 +1,9 @@
 from django.test import TestCase
 from django.contrib.auth import get_user_model
+from .views import *
+from unittest.mock import MagicMock, patch
+
+#from django_mock_queries.query import MockSet, MockModel
 
 class CustomUserTests(TestCase):
     def test_create_user(self):
@@ -27,3 +31,49 @@ class CustomUserTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+
+class AuthenticationTest(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        user = User.objects.create_user(
+            username='Henry',
+            email='henrisco@gmail.com', 
+            password='testpass544'
+        )
+        user2 = User.objects.create_user(
+            username='Henry2',
+            email='henrisco2@gmail.com', 
+            password='test4321dsfd'
+        )
+
+    def test_check_email(self):
+        check_user = get_user_model().objects.all()[0]
+        self.assertIn('@', check_user.email)
+        self.assertIn('.com', check_user.email)
+    
+    def test_check_bad_email(self):
+        check_user = get_user_model().objects.all()[1]
+        self.assertNotIn(',', check_user.email)
+        self.assertNotIn('!', check_user.email)
+        self.assertNotIn('¡', check_user.email)
+        self.assertNotIn('¿', check_user.email)
+        self.assertNotIn('?', check_user.email)
+        self.assertNotIn("'", check_user.email)
+        self.assertNotIn('|', check_user.email)
+        self.assertNotIn('°', check_user.email)
+        self.assertNotIn('"', check_user.email)
+
+    def test_check_duplicate_username(self):
+        self.assertEqual(check_duplicate_username("Henry"), True)
+    
+    def test_check_duplicate_email(self):
+        self.assertEqual(check_duplicate_username("invesntado@gmail.com"), False)
+        
+    def test_mock_create_user(self):
+        with patch('users.models.CustomUser') as user_patch:
+            mock_cp = MagicMock(spec=UsersListView)
+            mock_cp.model.username = "HenryLeon"
+            mock_cp.model.email = "henrisco@email.com"
+            self.assertEqual(mock_cp.model.username, "HenryLeon")
+            self.assertEqual(mock_cp.model.email, 'henrisco@email.com')
