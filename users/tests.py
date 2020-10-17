@@ -48,3 +48,15 @@ class AuthenticationTest(TestCase):
         self.assertIn('@', check_user.email)
         self.assertIn('.com', check_user.email)
     
+    def test_check_bad_email(self):
+        check_user = get_user_model().objects.all()[1]
+        self.assertNotIn(',', check_user.email)
+        self.assertNotIn('!', check_user.email)
+        self.assertNotIn('¡', check_user.email)
+        self.assertNotIn('¿', check_user.email)
+        self.assertNotIn('?', check_user.email)
+        self.assertNotIn("'", check_user.email)
+        self.assertNotIn('|', check_user.email)
+        self.assertNotIn('°', check_user.email)
+        self.assertNotIn('"', check_user.email)
+
