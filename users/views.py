@@ -22,13 +22,7 @@ def signUp(request):
         username = form.cleaned_data['username']
         password = form.cleaned_data['password']
         user = authenticate(username=username, password=password)'''
-
-        username = form.cleaned_data['username']
-        result = check_username(username)
-
-        print("VERIFICANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
-        print(result)
-
+    
         #Para que loguear luedo de su creación.
         do_login(request, user)
         return redirect('home')
@@ -43,5 +37,10 @@ def check_username(username):
 
 def check_duplicate_username(username):
     if CustomUser.objects.filter(username=username).exists():
+        return True
+    return False
+
+def check_duplicate_email(email):
+    if CustomUser.objects.filter(email=email).exists():
         return True
     return False

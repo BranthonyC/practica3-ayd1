@@ -63,3 +63,6 @@ class AuthenticationTest(TestCase):
 
     def test_check_duplicate_username(self):
         self.assertEqual(check_duplicate_username("Henry"), True)
+    
+    def test_check_duplicate_email(self):
+        self.assertEqual(check_duplicate_username("invesntado@gmail.com"), False)
