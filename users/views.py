@@ -7,7 +7,8 @@ from django.views.generic import View
 from django.template.loader import get_template
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
-
+from django.contrib.auth import get_user_model
+from django.contrib import messages
 
 
 # Create your views here.
@@ -22,6 +23,12 @@ def signUp(request):
         password = form.cleaned_data['password']
         user = authenticate(username=username, password=password)'''
 
+        username = form.cleaned_data['username']
+        result = check_username(username)
+
+        print("VERIFICANDOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO")
+        print(result)
+
         #Para que loguear luedo de su creación.
         do_login(request, user)
         return redirect('home')
@@ -29,3 +36,7 @@ def signUp(request):
     else:
         form = UserForm()
     return render(request, 'account/signup.html', {'form': form})
+
+def check_username(username):
+    users=CustomUser.objects.get(username=username)
+    return users

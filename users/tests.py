@@ -27,3 +27,24 @@ class CustomUserTests(TestCase):
         self.assertTrue(user.is_active)
         self.assertTrue(user.is_staff)
         self.assertTrue(user.is_superuser)
+
+
+class AuthenticationTest(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        user = User.objects.create_user(
+            username='Henry',
+            email='henrisco@gmail.com', 
+            password='testpass544'
+        )
+        user2 = User.objects.create_user(
+            username='Henry2',
+            email='henrisco2@gmail.com', 
+            password='test4321dsfd'
+        )
+
+    def test_check_email(self):
+        check_user = get_user_model().objects.all()[0]
+        self.assertIn('@', check_user.email)
+        self.assertIn('.com', check_user.email)
+    
