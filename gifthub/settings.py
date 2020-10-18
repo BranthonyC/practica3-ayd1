@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     # Local apps
     'users.apps.UsersConfig',
     'pages.apps.PagesConfig',
+    'CardCatalog',
 ]
 # django-crispy-forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4' # new
