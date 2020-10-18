@@ -1,0 +1,2 @@
+#Version 1:
+Se agregó las funciones de registro, modificación de usuario y login.
