@@ -46,3 +46,4 @@ class UserForm(forms.ModelForm):
             'password': forms.TextInput(attrs={'class':'form-control'}),
             'dpi': forms.TextInput(attrs={'class':'form-control'})
         }
+
