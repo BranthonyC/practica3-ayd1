@@ -84,3 +84,23 @@ class ViewsProfile(SimpleTestCase):
     def view_profile(self):
         response = self.client.get('/Perfil/')
         self.assertEqual(response.status_code, 200)
+
+class EditCustomTest(TestCase):
+    def test_edit_custom(self):
+        test_usuario = CustomUser.objects.create(username='alex', first_name='alexander', 
+        last_name='ixvalan', email='alexnd@gmail.com',
+        nacimiento='1995-12-12', password='la_password', dpi='6969958692359')
+
+        usuario = CustomUser.objects.get(username=test_usuario.username)
+
+        usuario.first_name = "alexanderXXX"
+        usuario.last_name = "ixvalanXXX"
+
+        usuario.save()
+
+        self.assertEqual(usuario.username, 'alex')
+        self.assertEqual(usuario.first_name, 'alexanderXXX')
+        self.assertEqual(usuario.last_name, 'ixvalanXXX')
+        self.assertEqual(usuario.email, 'alexnd@gmail.com')
+        self.assertEqual(usuario.password, 'la_password')
+        self.assertEqual(usuario.dpi, '6969958692359')
