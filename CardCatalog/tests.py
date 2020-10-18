@@ -18,3 +18,8 @@ class Response_Tests(TestCase):
         print(ResponseJson[0].get("total"))
         self.assertEqual(mock_cp.data, ResponseJson)
         self.assertEqual(mock_cp.data[0].get("total"), ResponseJson[0].get("total"))
+
+    def test_convertirPrecio(self):
+        mock_cp = MagicMock(return_value=388.5)   
+        mock_cp.convertirPrecio = 388.5
+        self.assertEqual(mock_cp(), convertirPrecio(50))
