@@ -79,3 +79,8 @@ class AuthenticationTest(TestCase):
             self.assertEqual(mock_cp.model.email, 'henrisco@email.com')
 
 
+class ViewsProfile(SimpleTestCase):
+
+    def view_profile(self):
+        response = self.client.get('/Perfil/')
+        self.assertEqual(response.status_code, 200)
