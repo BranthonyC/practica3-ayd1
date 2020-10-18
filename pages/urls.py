@@ -8,4 +8,5 @@ urlpatterns = [
     path('SignUp/', signUp, name='SignUp'),
     #path('Modificar_Perfil/<id>', modificar_perfil, name='modificar_perfil'),
     path('Perfil/', mostrar_perfil, name='mostrar_perfil'),
+    path('modificar_usuario/<user>', modificar_usuario, name='modificar_usuario'),
 ]

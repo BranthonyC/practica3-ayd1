@@ -54,5 +54,14 @@ def mostrar_perfil(request):
         #form = UserForm(instance=usuario)
         return render(request,'account/perfil.html')
 
-
+def modificar_usuario(request,user): 
+    usuario = CustomUser.objects.get(username=user) 
+    if request.method == 'GET':
+        form = UserForm(instance=usuario)
+    else:
+        form = UserForm(request.POST,instance=usuario)
+        if form.is_valid():
+            form.save()
+        return redirect('mostrar_perfil')
+    return render(request,'account/signup.html', {'form': form})
     
