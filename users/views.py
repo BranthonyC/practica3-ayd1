@@ -49,11 +49,10 @@ def check_duplicate_email(email):
     return False
 
 def mostrar_perfil(request):
-    usuario =CustomUser.objects.get(dpi=request.user.dpi) 
+    #usuario =CustomUser.objects.get(dpi=request.user.dpi) 
     if request.method == 'GET':
-        form = UserForm(instance=usuario)
-    
-    return render(request,'account/perfil.html', {'form': form})
+        #form = UserForm(instance=usuario)
+        return render(request,'account/perfil.html')
 
 
     
