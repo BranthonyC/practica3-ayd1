@@ -1,4 +1,4 @@
-from django.test import TestCase
+from django.test import TestCase,SimpleTestCase
 from django.contrib.auth import get_user_model
 from .views import *
 from unittest.mock import MagicMock, patch
@@ -77,3 +77,10 @@ class AuthenticationTest(TestCase):
             mock_cp.model.email = "henrisco@email.com"
             self.assertEqual(mock_cp.model.username, "HenryLeon")
             self.assertEqual(mock_cp.model.email, 'henrisco@email.com')
+
+
+class ViewsProfile(SimpleTestCase):
+
+    def view_profile(self):
+        response = self.client.get('/Perfil/')
+        self.assertEqual(response.status_code, 200)
