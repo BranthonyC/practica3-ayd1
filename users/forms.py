@@ -1,7 +1,27 @@
 from django.contrib.auth import get_user_model
+from allauth.account.forms import SignupForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import CustomUser
 from django import forms
+
+class DateInput(forms.DateInput):
+    input_type = 'date'
+    required = True
+
+class SimpleSignupForm(SignupForm):
+    first_name = forms.CharField(max_length=100, label='Nombres', required=True)
+    last_name = forms.CharField(max_length=100, label='Apellidos', required=True)
+    nacimiento = forms.DateField(widget=DateInput)
+    dpi = forms.CharField(max_length=20, required=True)
+    
+    def save(self, request):
+        user = super(SimpleSignupForm, self).save(request)
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.nacimiento = self.cleaned_data['nacimiento']
+        user.dpi = self.cleaned_data['dpi']
+        user.save()
+        return user
 
 
 class CustomUserCreationForm(UserCreationForm):
