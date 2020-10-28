@@ -7,3 +7,4 @@ class CustomUser(AbstractUser):
     nacimiento = models.DateField(auto_now=False, auto_now_add=False, null=True, default=datetime.now)
 
 # Comentario
+# Probando la integracion continua
