@@ -1,9 +1,11 @@
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+
 import requests
 from django.views.generic import TemplateView
 from .forms import cardForm
-from .models import detalle_transaccion
+from .models import detalle_transaccion,transaccion
 
 # Create your views here.
 def getAPI_TasaCambio():
@@ -33,15 +35,40 @@ def BuyGiftcard(request):
 
 def save_trans(request):
     query = request.POST
+
+    precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
+
+    total_ = float(query['cant'])*float(precio_unit)
+    
+    det_t = transaccion(
+        id_user=request.user,
+        total=total_,
+    )
+    det_t.save()
+
     compra=detalle_transaccion(
         id_card=query['id_card'],
         cant = query['cant'],
-        precio = query['precio'],
+        precio = precio_unit,
+        
     )
-    # recargo = .10*query['precio']
+    
     compra.save()
-    return render(request,'giftcard/transac.html', {'compra':compra})
 
+    return render(request,'giftcard/transac.html', {'compra': compra, 'total':total_})
+
+def finalizar_trans(request):
+    print("llego aca!!!")
+    compra = detalle_transaccion.objects.get(id_trans=null)
+    print("llego aca!!!2")
+    query = request.POST
+    det_t = transaccion(
+        id_user=user,
+        total=query['total']
+    )
+    compra.id_trans = det_t
+    compra.save()
+    return redirect('home')
 
 # def save_trans(request):
 #     print("========================")
