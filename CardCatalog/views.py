@@ -30,13 +30,26 @@ def BuyGiftcard(request):
   
     return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices})#, 'el_form': form})
 
-def save_trans(request):
-    print("========================")
-    prices = getValues()
-    for price in prices
-        print(price['total'])
 
-    return render(request,'giftcard/transac.html')
+def save_trans(request):
+    query = request.POST
+    compra=detalle_transaccion(
+        id_card=query['id_card'],
+        cant = query['cant'],
+        precio = query['precio'],
+    )
+    # recargo = .10*query['precio']
+    compra.save()
+    return render(request,'giftcard/transac.html', {'compra':compra})
+
+
+# def save_trans(request):
+#     print("========================")
+#     prices = getValues()
+#     for price in prices
+#         print(price['total'])
+
+#     return render(request,'giftcard/transac.html')
 
 
 # id_card = models.CharField(max_length=5)

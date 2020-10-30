@@ -30,18 +30,19 @@
                                 <p style="color: tomato;">Plataforma <b>deshabilitada</b></p>
                             {% endif %}
                             
-                            <form action="{% url 'save_trans' %}" method="GET">
+                            <form action="{% url 'save_trans' %}" method="POST">
+                                {% csrf_token %}
                                 <div class="form-group" style="display: none">
-                                    <input type="number" class="form-control" id="id_card" value="{{ card.id }}">
+                                    <input type="number" class="form-control" id="id_card" name="id_card" value="{{ card.id }}">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input type="number" class="form-control" id="cant" placeholder="Cantidad">
+                                    <input type="number" class="form-control" id="cant" name="cant" placeholder="Cantidad">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input type="number" class="form-control" id="precio" placeholder="precio">
+                                    <input type="number" class="form-control" id="precio" name="precio" placeholder="precio">
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <input type="number" class="form-control" id="id_trans" placeholder="id trans">
+                                    <input type="number" class="form-control" id="id_trans" name="id_trans" placeholder="id trans">
                                 </div>
                                 <!--
                                   <select class="form-control col-md-6">
