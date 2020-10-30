@@ -58,9 +58,9 @@ def save_trans(request):
     return render(request,'giftcard/transac.html', {'compra': compra, 'total':total_})
 
 def finalizar_trans(request):
-    print("llego aca!!!")
+    
     compra = detalle_transaccion.objects.get(id_trans=null)
-    print("llego aca!!!2")
+    
     query = request.POST
     det_t = transaccion(
         id_user=user,
