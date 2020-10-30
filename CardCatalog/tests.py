@@ -31,7 +31,14 @@ class servicio(TestCase):
         response = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Card')
         info = response.json()
         print(info)
-        print("========================")
+        # Confirm that the request-response cycle completed successfully.
+        self.assertTrue(response.ok)
+
+    def test_request_response_cards(self):
+        # Send a request to the API server and store the response.
+        response = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Value')
+        info = response.json()
+        print(info)
         #print(info[0].get("name"))
         # Confirm that the request-response cycle completed successfully.
         self.assertTrue(response.ok)
