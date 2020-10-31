@@ -35,40 +35,60 @@ def BuyGiftcard(request):
 
 def save_trans(request):
     query = request.POST
+    temp = detalle_transaccion.objects.filter(id_trans=None)
+    total = 0.0
 
-    precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
+    for temp2 in temp:
+        total = total + (float(temp2.cant) * float(temp2.precio))
+        print(total)
 
-    total_ = float(query['cant'])*float(precio_unit)
+    #precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
+
+    #total_ = float(query['cant'])*float(precio_unit)
     
-    det_t = transaccion(
+    trans = transaccion(
         id_user=request.user,
-        total=total_,
+        total=total,
     )
-    det_t.save()
+    trans.save()
 
-    compra=detalle_transaccion(
-        id_card=query['id_card'],
-        cant = query['cant'],
-        precio = precio_unit,
-        
-    )
-    
-    compra.save()
+    for temp2 in temp:
+        temp2.id_trans = trans
+        temp2.save()
 
-    return render(request,'giftcard/transac.html', {'compra': compra, 'total':total_})
+    return render(request,'home.html')
 
-def finalizar_trans(request):
+def carrito(request):
+    cards = getCards()
+    prices = getValues()
+    temp = detalle_transaccion.objects.filter(id_trans=None)
+    nombre = "nada"
+    #temp = detalle_transaccion.objects.all()
     
-    compra = detalle_transaccion.objects.get(id_trans=null)
+    if request.method == 'POST':
+        query = request.POST
+        nombre = query.get('names', "nada")
+        if nombre != "nada":
+            precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
+            nombre = query.get('names', "nada")
+
+            compra=detalle_transaccion(
+                id_card=query['id_card'],
+                cant = query['cant'],
+                precio = precio_unit,
+            )
+            compra.save()
+    else:
+        compra=detalle_transaccion(
+            id_card=0,
+            cant = 0,
+            precio = 0.0,
+        )
     
-    query = request.POST
-    det_t = transaccion(
-        id_user=user,
-        total=query['total']
-    )
-    compra.id_trans = det_t
-    compra.save()
-    return redirect('home')
+    #compra.save()
+
+    #return render(request,'giftcard/transac.html', {'compra': compra})
+    return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices, 'compra': temp, 'nombre': nombre})#, 'el_form': form})
 
 # def save_trans(request):
 #     print("========================")

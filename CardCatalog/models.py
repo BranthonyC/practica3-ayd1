@@ -13,10 +13,10 @@ class detalle_transaccion(models.Model):
     id_card = models.CharField(max_length=5)
     cant = models.CharField(max_length=5)
     precio = models.CharField(max_length=5)
-    id_trans = models.ForeignKey(transaccion, on_delete=models.CASCADE, null=True, blank=True)
+    id_trans = models.ForeignKey(transaccion, on_delete=models.CASCADE, null=True, blank=True, default=None)
 
     def __str__(self):
-        return "Transaccion ID " + self.id_card
+        return "Transaccion ID " + str(self.pk)
 
  
 
