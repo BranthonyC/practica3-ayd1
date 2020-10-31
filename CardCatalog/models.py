@@ -9,6 +9,9 @@ class transaccion(models.Model):
     total = models.FloatField()
     fecha = models.DateTimeField(default=datetime.now)
 
+    def __str__(self):
+        return ": TOTAL:{0}".format(self.total)
+
 class detalle_transaccion(models.Model):
     id_card = models.CharField(max_length=5)
     cant = models.CharField(max_length=5)

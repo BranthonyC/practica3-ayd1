@@ -2,6 +2,7 @@ from django.urls import path
 from .views import HomePageView
 from users.views import *
 from CardCatalog.views import BuyGiftcard,save_trans,finalizar_trans
+from CardCatalog.views import detalle_transaccionListView
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -12,4 +13,5 @@ urlpatterns = [
     path('buy_card/', BuyGiftcard, name='buy_card'),
     path('save_trans/', save_trans, name='save_trans'),
     path('finalizar_trans/', finalizar_trans, name='finalizar_trans'),
+    path('history/', detalle_transaccionListView.as_view(), name="historial_compras")
 ]
