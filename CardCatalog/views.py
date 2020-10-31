@@ -3,9 +3,18 @@ from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
 
 import requests
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from .forms import cardForm
-from .models import detalle_transaccion,transaccion
+from .models import detalle_transaccion, transaccion
+
+
+class detalle_transaccionListView(ListView):
+    model = detalle_transaccion
+    template_name = "giftcard/history.html"
+    context_object_name = "lista_transacciones"
+
+    def get_queryset(self):
+        return detalle_transaccion.objects.filter(id_trans__id_user=self.request.user)
 
 # Create your views here.
 def getAPI_TasaCambio():
