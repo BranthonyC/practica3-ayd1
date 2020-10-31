@@ -1,11 +1,12 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from django.http import HttpResponseRedirect
+from django.contrib import messages
 
 import requests
 from django.views.generic import TemplateView
-from .forms import cardForm
-from .models import detalle_transaccion,transaccion
+from .forms import *
+from .models import *
 
 # Create your views here.
 def getAPI_TasaCambio():
@@ -32,31 +33,6 @@ def BuyGiftcard(request):
   
     return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices})#, 'el_form': form})
 
-
-def save_trans(request):
-    query = request.POST
-    temp = detalle_transaccion.objects.filter(id_trans=None)
-    total = 0.0
-
-    for temp2 in temp:
-        total = total + (float(temp2.cant) * float(temp2.precio))
-        print(total)
-
-    #precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
-
-    #total_ = float(query['cant'])*float(precio_unit)
-    
-    trans = transaccion(
-        id_user=request.user,
-        total=total,
-    )
-    trans.save()
-
-    for temp2 in temp:
-        temp2.id_trans = trans
-        temp2.save()
-
-    return render(request,'home.html')
 
 def carrito(request):
     cards = getCards()
@@ -85,10 +61,70 @@ def carrito(request):
             precio = 0.0,
         )
     
-    #compra.save()
-
-    #return render(request,'giftcard/transac.html', {'compra': compra})
     return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices, 'compra': temp, 'nombre': nombre})#, 'el_form': form})
+
+
+def save_trans(request):
+    query = request.POST
+    temp = detalle_transaccion.objects.filter(id_trans=None)
+    total = 0.0
+
+    for temp2 in temp:
+        total = total + (float(temp2.cant) * float(temp2.precio))
+        print(total)
+    
+    trans = transaccion(
+        id_user=request.user,
+        total=total,
+    )
+    trans.save()
+
+    for temp2 in temp:
+        temp2.id_trans = trans
+        temp2.save()
+
+    return HttpResponseRedirect('/payment/'+str(trans.id))
+
+
+def pago_Tarjeta(request, id):
+    id_trans = id
+    trans = transaccion.objects.get(pk=id)
+    total_q = convertirPrecio(trans.total)
+    monto = 0.0
+
+    if request.method == 'POST':
+        query = request.POST
+        moneda = query['moneda']
+
+        if moneda == "Quetzales":
+            monto = str(total_q)
+        else:
+            monto = str(trans.total)
+
+        pago_trans=tarjeta_transaccion(
+            numero_tarjeta = query['numero_tarjeta'],
+            nombre_tarjeta = query['nombre_tarjeta'],
+            fecha_expiracion = query['fecha_expiracion'],
+            codigo = query['codigo'],
+            monto = monto,
+            moneda = query['moneda'],
+            estado = "Exitoso",
+            id_trans = trans,
+        )
+        pago_trans.save()
+
+        #print(numero_tarjeta + nombre_tarjeta + fecha_expiracion + codigo + monto + moneda + total_q + estado)
+        #form1 = pagoforms(request.POST)
+        #if form1.is_valid():
+        #    pago = form1.save(commit=False)
+        #    pago.creador = trans
+        #    #pago.save()
+        #    messages.success(request, 'Bodega registrada correctamente')
+        return HttpResponseRedirect('/carrito/')
+    else:
+        messages.error(request, 'No cumple con requisitos')
+        form1=pagoforms()
+    return render(request,'giftcard/payment.html',{'id_trans': id_trans, 'trans': trans, 'total_q': total_q})
 
 # def save_trans(request):
 #     print("========================")

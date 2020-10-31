@@ -12,4 +12,5 @@ urlpatterns = [
     path('buy_card/', BuyGiftcard, name='buy_card'),
     path('save_trans/', save_trans, name='save_trans'),
     path('carrito/', carrito, name='carrito'),
+    path('payment/<id>', pago_Tarjeta, name='payment'),
 ]
