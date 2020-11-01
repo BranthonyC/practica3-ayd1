@@ -7,7 +7,7 @@ import requests
 from django.views.generic import TemplateView, ListView
 from .forms import *
 from .models import *
-
+from users.models import *
 
 class detalle_transaccionListView(ListView):
     model = detalle_transaccion
@@ -61,6 +61,7 @@ def carrito(request):
                 id_card=query['id_card'],
                 cant = query['cant'],
                 precio = precio_unit,
+                val_card=query['precio'],
             )
             compra.save()
     else:
@@ -100,7 +101,7 @@ def pago_Tarjeta(request, id):
     trans = transaccion.objects.get(pk=id)
     total_q = convertirPrecio(trans.total)
     monto = 0.0
-
+    print(request)
     if request.method == 'POST':
         query = request.POST
         moneda = query['moneda']
@@ -121,7 +122,21 @@ def pago_Tarjeta(request, id):
             id_trans = trans,
         )
         pago_trans.save()
+        #Agrego la(s) tarjeta(s) a la tarjetas del usuario
+        det_trans=detalle_transaccion.objects.filter(id_trans=trans)
+        
+        for detalle in det_trans:
+            cantidad_tarjetas = (int(detalle.cant))
+            cont = 0
+            while cont < cantidad_tarjetas:
 
+                userTarjet = TarjetasUsuario(
+                    id_user = request.user,
+                    id_tarjeta = detalle.id_card,
+                    valor_tarjeta = detalle.val_card,
+                )
+                userTarjet.save()
+                cont=cont+1
         #print(numero_tarjeta + nombre_tarjeta + fecha_expiracion + codigo + monto + moneda + total_q + estado)
         #form1 = pagoforms(request.POST)
         #if form1.is_valid():
