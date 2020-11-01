@@ -15,9 +15,11 @@ class transaccion(models.Model): #Es como la factura, no es una transaccion
 
 class detalle_transaccion(models.Model):
     id_card = models.CharField(max_length=5)
+    val_card=models.CharField(max_length=5, null= True)
     cant = models.CharField(max_length=5)
     precio = models.CharField(max_length=5)
     id_trans = models.ForeignKey(transaccion, on_delete=models.CASCADE, null=True, blank=True, default=None)
+    
 
     def __str__(self):
         return "Detalle_Compra_ID: " + str(self.pk)
@@ -45,5 +47,4 @@ class tarjeta_transaccion(models.Model):    #Esta si es la transaccion de la tar
 
     def __str__(self):
         return "Transaccion No: " + str(self.pk)
-
 
