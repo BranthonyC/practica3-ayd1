@@ -10,12 +10,12 @@ from .models import *
 from users.models import *
 
 class detalle_transaccionListView(ListView):
-    model = detalle_transaccion
+    model = transaccion
     template_name = "giftcard/history.html"
     context_object_name = "lista_transacciones"
 
     def get_queryset(self):
-        return detalle_transaccion.objects.filter(id_trans__id_user=self.request.user)
+        return transaccion.objects.filter(id_user=self.request.user)
 
 # Create your views here.
 def getAPI_TasaCambio():
