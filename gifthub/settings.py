@@ -156,7 +156,7 @@ EMAIL_PORT=os.environ.get('EMAIL_PORT')
 
 # Django allauth config
 SITE_ID = 1
-
+LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
 ACCOUNT_LOGOUT_REDIRECT='home'
 

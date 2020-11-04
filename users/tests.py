@@ -2,7 +2,10 @@ from django.test import TestCase,SimpleTestCase
 from django.contrib.auth import get_user_model
 from .views import *
 from unittest.mock import MagicMock, patch
-
+from django.contrib.auth import get_user_model
+from django.conf import settings
+from django.urls import reverse
+from django.test.client import Client, RequestFactory
 #from django_mock_queries.query import MockSet, MockModel
 
 class CustomUserTests(TestCase):
@@ -104,3 +107,27 @@ class EditCustomTest(TestCase):
         self.assertEqual(usuario.email, 'alexnd@gmail.com')
         self.assertEqual(usuario.password, 'la_password')
         self.assertEqual(usuario.dpi, '6969958692359')
+
+
+class LoginSuccess(TestCase):
+
+    def setUp(self):
+        self.client = Client()
+        self.username="testuser"
+        self.password="secret"
+        CustomUser.objects.create_user(
+            username=self.username,
+            password=self.password
+        )
+
+    def test_login(self):
+        response = self.client.post(reverse('account_login'), {"login": self.username, "password": self.password}
+        )
+        self.assertEqual(response.status_code,200)
+
+    def test_wrong_login(self):
+        response = self.client.post(reverse('account_login'),
+         {"login": "bad@login.com", "password": "wrong"}
+        )
+        validation_error = 'The e-mail address and/or password you specified are not correct'
+        assert validation_error in response.content.decode('utf-8')
