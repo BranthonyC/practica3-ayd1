@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from allauth.account.forms import SignupForm
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import CustomUser
+from .models import CustomUser, TarjetasUsuario
 from django import forms
 
 class DateInput(forms.DateInput):
@@ -66,4 +66,23 @@ class UserForm(forms.ModelForm):
             'password': forms.TextInput(attrs={'class':'form-control'}),
             'dpi': forms.TextInput(attrs={'class':'form-control'})
         }
+
+class tarjetaForm(forms.ModelForm):
+    class Meta:
+        model = TarjetasUsuario
+        fields = [
+            'id_user',
+            #'id_tarjeta',
+            #'valor_tarjeta'
+            ]
+        labels = {
+            'id_user': 'nombre',
+            #'id_tarjeta': 'tarjeta',
+            #'valor_tarjeta': 'valor',
+        }
+        widgets = {
+            'id_user': forms.Select(attrs={'class':'form-control'}),
+           # 'id_tarjeta': forms.TextInput(attrs={'class':'form-control'}),
+            #'valor_tarjeta': forms.TextInput(attrs={'class':'form-control'})
+        } 
 
