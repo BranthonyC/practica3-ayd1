@@ -140,3 +140,8 @@ class TestCompra(TestCase):
         self.assertEqual(self.check_trans[0].total, 650.60)
         self.assertEqual(check_pago[0].codigo, "ab1")
         
+class Alfanumerico_Test(TestCase):
+    def test_alfanumerico(self):
+        alfanumerico = id_generator()
+        self.assertEqual(len(alfanumerico),8)
+        
