@@ -35,11 +35,32 @@ def getValues():
     response = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Value')
     return response.json()
 
+def getPrecios():
+    resC = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Card')
+    dataC = json.loads(resC.text)
+    resP = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Value')
+    dataP = json.loads(resP.text)
+
+    for tarjeta in dataC:
+        for lPrice in tarjeta['availability']:
+            for objPrice in resP:
+                if str(lPrice) == str(objPrice['id']):
+                    lPrice = objPrice['total']
+    
+    return dataC
+
 def BuyGiftcard(request):
     cards = getCards()
     prices = getValues()
     #form = cardForm(request.POST or None)
-  
+    # for tarjeta in cards:
+    #     for lPrice in tarjeta['availability']:
+    #         for objPrice in prices:
+    #             if str(lPrice) == str(objPrice['id']):
+    #                 lPrice = objPrice['total']
+    #         pass
+    #     pass
+    # pass
     return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices})#, 'el_form': form})
 
 

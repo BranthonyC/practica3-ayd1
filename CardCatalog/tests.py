@@ -24,8 +24,9 @@ class Response_Tests(TestCase):
         mock_cp.convertirPrecio = 388.5
         self.assertEqual(mock_cp(), convertirPrecio(50))
 
-class servicio(TestCase):
 
+
+class servicio(TestCase):
     def test_request_response_cards(self):
         # Send a request to the API server and store the response.
         response = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Card')
@@ -42,5 +43,3 @@ class servicio(TestCase):
         #print(info[0].get("name"))
         # Confirm that the request-response cycle completed successfully.
         self.assertTrue(response.ok)
-
-    

@@ -37,6 +37,7 @@
                 </td>
             </tr>
             {% for card in cards %}
+            {% if card.active %}
             <tr>
                 <td colspan="2" width="30%" style="text-align: center;">
                     <div>
@@ -66,11 +67,6 @@
                             <div class="form-group col-md-6">
                                 <input type="number" class="form-control" id="cant" name="cant" placeholder="Cantidad">
                             </div>
-                            <!--
-                                <div class="form-group col-md-6">
-                                    <input type="number" class="form-control" id="precio" name="precio" placeholder="precio">
-                                </div>
-                                -->
                             <div class="form-group col-md-6" style="display: none">
                                 <input class="form-control" id="recargo" name="recargo" value="{{ card.chargeRate }}">
                             </div>
@@ -82,8 +78,15 @@
                                 <label for="precio">Precio:</label>
                                 <select id="precio" name="precio">
 
-                                    {% for price in prices %}
-                                    <option>{{price.total}}</option>
+                                    <!--Recorriendo lista de codigos de precios-->
+                                    {% for codP in card.availability %} 
+                                        <!--Recorriendo lista de objetos de price(id,total)-->
+                                        {% for price in prices %}
+
+                                            {% if price.id|stringformat:"s" == codP|stringformat:"s" %}
+                                                <option>{{ price.total }}</option>
+                                            {% endif %}
+                                        {% endfor %}
                                     {% endfor %}
 
                                 </select>
@@ -93,6 +96,7 @@
                     </div>
                 </td>
             </tr>
+            {% endif %}
             {% endfor %}
 
         </tbody>
