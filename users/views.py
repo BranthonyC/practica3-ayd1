@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import CustomUser,TarjetasUsuario
-from .forms import UserForm
+from .forms import UserForm, tarjetaForm
 from django.http import HttpResponse
 from django.views.generic import View, ListView
 from django.template.loader import get_template
@@ -83,3 +83,16 @@ def getImageCards(id):
         if i['id']==str(id):
             return i['image']
     pass
+
+def modificarUserCard(request,id):
+    tarjeta = TarjetasUsuario.objects.get(pk=id) 
+    if request.method == 'GET':
+        form = tarjetaForm(instance=tarjeta)
+        form.img = getImageCards(tarjeta.id_tarjeta)
+    else:
+        print(request.POST)
+        form2 = tarjetaForm(request.POST,instance=tarjeta)
+        if form2.is_valid():
+            form2.save()
+        return redirect('mis_tarjetas')
+    return render(request,'giftcard/regalo.html', {'form': form})

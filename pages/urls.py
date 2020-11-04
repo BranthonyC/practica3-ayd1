@@ -16,4 +16,5 @@ urlpatterns = [
     path('carrito/', carrito, name='carrito'),
     path('payment/<id>', pago_Tarjeta, name='payment'),
     path('MisTarjetas/', mis_tarjetas, name='mis_tarjetas'),
+    path('modificarUserCard/<id>', modificarUserCard, name='modificarUserCard'),
 ]

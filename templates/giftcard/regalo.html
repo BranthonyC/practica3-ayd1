@@ -1,10 +1,10 @@
-
 {% extends '_base.html' %}
-
 {% block content %}
 
-<h1 style="text-align: center;">GIFT CARDS COMPRADAS - {{ user.username }}</h1>
+<h1 style="text-align: center;">REGALAR GIFTCARD A UN AMIGO - {{ user.username }}</h1>
 
+<form method='POST'>
+    {% csrf_token %}
 <table>
     <table class="table table- table-dark table-hover table-sm">
         <thead>
@@ -12,18 +12,19 @@
         </thead>
         <tbody>
             
-            {% for card in tarjetas %}
             <tr>
-                <td colspan="2" width="30%" style="text-align: center;">
+                <td colspan="3" width="30%" style="text-align: center;">
                     <div>
-                        <img src="{{ card.img }}" alt="Card" class="img-responsive margin" style="width:30%"
+                        <img src="{{ form.img }}" alt="Card" class="img-responsive margin" style="width:30%"
                             alt="Image">
                     </div>
                 </td>
                 <td>
                     <br>
                     <div>
-                        <h4>Tarjeta de {{card.valor_tarjeta}} dolares</h4>
+                        <h4>Sorprende a: {{form.id_user}} </h4>
+                        
+                      
                        <!-- <h4>{{card.id_user}}</h4> -->
                     </div>
                     
@@ -32,14 +33,15 @@
                     <br>
                     <div>
                         <!-- <button type="submit" class="btn btn-outline-info">Regalar Tarjeta</button> -->
-                        <a href="{% url 'modificarUserCard' card.id %}" class="btn btn-warning "> Regalar Tarjeta </a>
+                        <button type="submit" class="btn btn-primary btn-block mb-5">Guardar</button>
                     </div>
                 </td>
                 
             </tr>
-            {% endfor %}
+       
 
         </tbody>
     </table>
 </table>
-{% endblock %}
+</form>
+{% endblock content %}
