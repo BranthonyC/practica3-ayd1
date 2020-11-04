@@ -1,8 +1,17 @@
-from django.test import TestCase,SimpleTestCase
+from django.test import TestCase,SimpleTestCase,override_settings, tag
 from django.contrib.auth import get_user_model
 from .views import *
 from unittest.mock import MagicMock, patch
-
+from django.contrib.staticfiles.testing import StaticLiveServerTestCase
+from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By 
+#from selenium.webdriver.firefox.webdriver import WebDriver
+from selenium import webdriver
+import os
+import time
 #from django_mock_queries.query import MockSet, MockModel
 
 class CustomUserTests(TestCase):
@@ -104,3 +113,59 @@ class EditCustomTest(TestCase):
         self.assertEqual(usuario.email, 'alexnd@gmail.com')
         self.assertEqual(usuario.password, 'la_password')
         self.assertEqual(usuario.dpi, '6969958692359')
+
+class MySeleniumTests(StaticLiveServerTestCase):
+    #fixtures = ['user-data.json']
+    host = '0.0.0.0'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.host = "web"
+        cls.selenium = webdriver.Remote(
+            command_executor=os.environ['SELENIUM_HOST'],
+            desired_capabilities=DesiredCapabilities.FIREFOX,
+        )
+        cls.selenium.implicitly_wait(10) 
+        super(MySeleniumTests,cls).setUpClass()
+    
+    def setUp(self):
+        self.browser = webdriver.Remote("http://selenium:4444/wd/hub", DesiredCapabilities.FIREFOX)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.selenium.quit()
+        super(MySeleniumTests, cls).tearDownClass()
+
+
+    def test_login_E2E_Fail(self):
+        print(self.live_server_url)
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        username_input = self.selenium.find_element_by_id("id_login")
+        username_input.send_keys('eddjavsgmail.com')
+        password_input = self.selenium.find_element_by_id("id_password")
+        password_input.send_keys('Eddy123258')
+        current_url=self.selenium.current_url
+        message_correo=username_input.get_attribute("validationMessage")
+        message_password=password_input.get_attribute("validationMessage")
+        boton1=self.selenium.find_element_by_xpath("//form[@id='form_id']/button[@class='btn btn-success']")
+        boton1.click()
+        self.assertEqual(message_correo,"")
+        self.assertEqual(message_password,"")
+        
+    
+    def test_login_E2E_Success(self):
+        print(self.live_server_url)
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
+        username_input = self.selenium.find_element_by_id("id_login")
+        username_input.send_keys('eddjavs@gmail.com')
+        password_input = self.selenium.find_element_by_id("id_password")
+        password_input.send_keys('Eddy123258')
+        current_url=self.selenium.current_url
+        message_correo=username_input.get_attribute("validationMessage")
+        message_password=password_input.get_attribute("validationMessage")
+        boton1=self.selenium.find_element_by_xpath("//form[@id='form_id']/button[@class='btn btn-success']")
+        boton1.click()
+        self.assertEqual(message_correo,"")
+        self.assertEqual(message_password,"")
+            
+        
