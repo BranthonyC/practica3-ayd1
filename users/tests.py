@@ -1,6 +1,7 @@
 from django.test import TestCase,SimpleTestCase,override_settings, tag
 from django.contrib.auth import get_user_model
 from .views import *
+from .models import *
 from unittest.mock import MagicMock, patch
 from django.contrib.auth import get_user_model
 from django.conf import settings
@@ -157,6 +158,12 @@ class MySeleniumTests(StaticLiveServerTestCase):
     
     def setUp(self):
         self.browser = webdriver.Remote("http://selenium:4444/wd/hub", DesiredCapabilities.FIREFOX)
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username='eddjavier',
+            email='eddjavier@gmail.com',
+            password='Tpasscode123',
+        )
 
     @classmethod
     def tearDownClass(cls):
@@ -168,15 +175,53 @@ class MySeleniumTests(StaticLiveServerTestCase):
         print(self.live_server_url)
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         username_input = self.selenium.find_element_by_id("id_login")
-        username_input.send_keys('eddjavs@gmail.com')
+        username_input.send_keys('eddjavier@gmail.com')
         password_input = self.selenium.find_element_by_id("id_password")
-        password_input.send_keys('Eddy123258')
+        password_input.send_keys('Tpasscode123')
         current_url=self.selenium.current_url
+        print(self.selenium.current_url)
         message_correo=username_input.get_attribute("validationMessage")
         message_password=password_input.get_attribute("validationMessage")
         boton1=self.selenium.find_element_by_xpath("//form[@id='form_id']/button[@class='btn btn-success']")
         boton1.click()
         self.assertEqual(message_correo,"")
         self.assertEqual(message_password,"")
+        self.assertNotEqual(self.selenium.current_url,current_url)
+        self.assertEqual(self.selenium.current_url,self.live_server_url+"/")
+        print(self.selenium.current_url)
             
+    def test_registry_E2E(self):
+    
+        print(self.live_server_url)
+        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/signup/'))
+        email_input = self.selenium.find_element_by_id("id_email")
+        email_input.send_keys('eddyjavier@gmail.com')
+        first_name_input = self.selenium.find_element_by_id("id_first_name")
+        first_name_input.send_keys('Eddy')
+        last_name_input = self.selenium.find_element_by_id("id_last_name")
+        last_name_input.send_keys('Sirin')
+        nacimiento_input = self.selenium.find_element_by_id("id_nacimiento")
+        #el = WebDriverWait(self.selenium, 20).until(EC.visibility_of_all_elements_located((By.ID, "id_nacimiento")))
+        #el.clear()
+        #el.send_keys("2020-02-12")
+        nacimiento_input.click()
+        nacimiento_input.send_keys('2020-11-20')
+        dpi_input = self.selenium.find_element_by_id("id_dpi")
+        dpi_input.send_keys('2959919600101')
+        password_input = self.selenium.find_element_by_id("id_password1")
+        password_input.send_keys('TestPassword123456')
+        current_url=self.selenium.current_url
+        print(self.selenium.current_url)
+        print("text date: "+nacimiento_input.get_attribute("value"))
+        message_correo=email_input.get_attribute("validationMessage")
+        message_password=password_input.get_attribute("validationMessage")
+        message_nacimiento=nacimiento_input.get_attribute("validationMessage")
+        boton1=self.selenium.find_element_by_xpath("//form[@id='form_id']/button[@class='btn btn-success']")
+        boton1.click()
+        self.assertEqual(message_correo,"")
+        self.assertEqual(message_password,"")
+        self.assertEqual(message_nacimiento,"")
+        self.assertNotEqual(self.selenium.current_url,current_url)
+        self.assertEqual(self.selenium.current_url,self.live_server_url+"/")
+        print(self.selenium.current_url)
         
