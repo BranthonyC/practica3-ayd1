@@ -52,16 +52,15 @@ def getPrecios():
 def BuyGiftcard(request):
     cards = getCards()
     prices = getValues()
-    #form = cardForm(request.POST or None)
-    # for tarjeta in cards:
-    #     for lPrice in tarjeta['availability']:
-    #         for objPrice in prices:
-    #             if str(lPrice) == str(objPrice['id']):
-    #                 lPrice = objPrice['total']
-    #         pass
-    #     pass
-    # pass
-    return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices})#, 'el_form': form})
+    temp = detalle_transaccion.objects.filter(id_trans=None)
+    activa = 0
+    
+    if temp.count() > 0:
+        activa = 1
+    else:
+        activa = 0
+
+    return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices, 'activa': activa})#, 'el_form': form})
 
 
 def carrito(request):
@@ -69,18 +68,29 @@ def carrito(request):
     prices = getValues()
     temp = detalle_transaccion.objects.filter(id_trans=None)
     nombre = "nada"
+    cant_ = "1"
+    activa = 1
     #temp = detalle_transaccion.objects.all()
+
+    if temp.count() > 0:
+        activa = 1
+    else:
+        activa = 0
     
     if request.method == 'POST':
         query = request.POST
         nombre = query.get('names', "nada")
         if nombre != "nada":
+
+            if query['cant'] != '':
+                cant_ = query['cant']
+
             precio_unit = float(query['precio'])+(float(query['precio'])*float(query['recargo']))
             nombre = query.get('names', "nada")
-
+            
             compra=detalle_transaccion(
                 id_card=query['id_card'],
-                cant = query['cant'],
+                cant = cant_,
                 precio = precio_unit,
                 val_card=query['precio'],
             )
@@ -92,7 +102,7 @@ def carrito(request):
             precio = 0.0,
         )
     
-    return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices, 'compra': temp, 'nombre': nombre})#, 'el_form': form})
+    return render(request,'giftcard/buy_giftcard.html',{'cards': cards, 'prices': prices, 'compra': temp, 'nombre': nombre, 'activa': activa})#, 'el_form': form})
 
 
 def save_trans(request):
@@ -101,6 +111,8 @@ def save_trans(request):
     total = 0.0
 
     for temp2 in temp:
+        print(temp2.cant)
+        print(temp2.precio)
         total = total + (float(temp2.cant) * float(temp2.precio))
         print(total)
     

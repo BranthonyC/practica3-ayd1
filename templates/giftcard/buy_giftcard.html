@@ -31,9 +31,11 @@
             {% endfor %}
             <tr>
                 <td colspan="3" style="text-align: center;">
+                    {% if activa == 1%}                    
                     --------------------<a style="text-align: center;" href="{% url 'save_trans'  %}" class="btn btn-success">
                         Finalizar Compra
                     </a>---------------------
+                    {% endif %}
                 </td>
             </tr>
             {% for card in cards %}
@@ -65,7 +67,7 @@
                                     value="{{ card.id }}">
                             </div>
                             <div class="form-group col-md-6">
-                                <input type="number" class="form-control" id="cant" name="cant" placeholder="Cantidad">
+                                <input min="1" type="number" class="form-control" id="cant" name="cant" placeholder="Cantidad">
                             </div>
                             <div class="form-group col-md-6" style="display: none">
                                 <input class="form-control" id="recargo" name="recargo" value="{{ card.chargeRate }}">
@@ -76,7 +78,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="precio">Precio:</label>
-                                <select id="precio" name="precio">
+                                <select type="number" id="precio" name="precio">
 
                                     <!--Recorriendo lista de codigos de precios-->
                                     {% for codP in card.availability %} 
