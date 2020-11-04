@@ -80,13 +80,6 @@ class TestCompra(TestCase):
     }
 
     check_user = get_user_model().objects.all()
-
-    trans = {
-        'id_user': check_user[0],
-        'total': 650.60,
-        'id': '1'
-    } 
-
     check_trans = transaccion.objects.all()
         
     def test_Compra(self):
