@@ -72,7 +72,7 @@ def carrito(request):
     activa = 1
     #temp = detalle_transaccion.objects.all()
 
-    if temp.count() > 0:
+    if len(temp) > 0:
         activa = 1
     else:
         activa = 0
