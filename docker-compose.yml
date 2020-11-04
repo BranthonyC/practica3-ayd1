@@ -10,18 +10,26 @@ services:
       - 8000:8000
     depends_on:
       - db
+      - selenium
     environment:
       - EMAIL_USE_SSL=True
       - EMAIL_PORT=465
       - EMAIL_HOST_PASSWORD=4mxctMcfLN7UvG3
       - EMAIL_HOST_USER=sysbodega1@gmail.com
       - EMAIL_HOST=smtp.gmail.com
+      - SELENIUM_HOST=http://selenium:4444/wd/hub
+    links:
+      - selenium
   db:
     image: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
       - "POSTGRES_HOST_AUTH_METHOD=trust"
+  selenium:
+    image: selenium/standalone-firefox
+    expose:
+      - 4444
 
 volumes:
   postgres_data:
