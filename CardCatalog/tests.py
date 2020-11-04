@@ -6,6 +6,16 @@ from .models import *
 from django.contrib.auth import get_user_model
 import requests
 
+
+class CardTests(TestCase):
+
+    def setUp(self):
+        self.tarjeta = tarjeta_transaccion.objects.create(numero_tarjeta='1234567891234567')
+
+    def card_correct_mask(self):
+        self.assertEqual(self.tarjeta,'1234XXXXXXXX4567')
+
+
 class Response_Tests(TestCase):
     def test_request_response_TasaCambio(self):
         # Send a request to the API server and store the response.
