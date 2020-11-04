@@ -8,6 +8,8 @@ from django.views.generic import TemplateView, ListView
 from .forms import *
 from .models import *
 from users.models import *
+import string
+import random
 
 class detalle_transaccionListView(ListView):
     model = transaccion
@@ -134,6 +136,8 @@ def pago_Tarjeta(request, id):
                     id_user = request.user,
                     id_tarjeta = detalle.id_card,
                     valor_tarjeta = detalle.val_card,
+                    alfanumerico=id_generator()
+                    
                 )
                 userTarjet.save()
                 cont=cont+1
@@ -149,6 +153,9 @@ def pago_Tarjeta(request, id):
         messages.error(request, 'No cumple con requisitos')
         form1=pagoforms()
     return render(request,'giftcard/payment.html',{'id_trans': id_trans, 'trans': trans, 'total_q': total_q})
+    
+def id_generator(size=8, chars=string.ascii_uppercase + string.digits):
+        return ''.join(random.choice(chars) for _ in range(size))
 
 # def save_trans(request):
 #     print("========================")
