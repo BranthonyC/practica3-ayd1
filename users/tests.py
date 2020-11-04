@@ -136,24 +136,8 @@ class MySeleniumTests(StaticLiveServerTestCase):
         cls.selenium.quit()
         super(MySeleniumTests, cls).tearDownClass()
 
-
-    def test_login_E2E_Fail(self):
-        print(self.live_server_url)
-        self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
-        username_input = self.selenium.find_element_by_id("id_login")
-        username_input.send_keys('eddjavsgmail.com')
-        password_input = self.selenium.find_element_by_id("id_password")
-        password_input.send_keys('Eddy123258')
-        current_url=self.selenium.current_url
-        message_correo=username_input.get_attribute("validationMessage")
-        message_password=password_input.get_attribute("validationMessage")
-        boton1=self.selenium.find_element_by_xpath("//form[@id='form_id']/button[@class='btn btn-success']")
-        boton1.click()
-        self.assertEqual(message_correo,"")
-        self.assertEqual(message_password,"")
-        
     
-    def test_login_E2E_Success(self):
+    def test_login_E2E(self):
         print(self.live_server_url)
         self.selenium.get('%s%s' % (self.live_server_url, '/accounts/login/'))
         username_input = self.selenium.find_element_by_id("id_login")
