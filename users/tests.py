@@ -225,3 +225,4 @@ class MySeleniumTests(StaticLiveServerTestCase):
         self.assertEqual(self.selenium.current_url,self.live_server_url+"/")
         print(self.selenium.current_url)
         
+#comentario
