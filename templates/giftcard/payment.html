@@ -1,0 +1,58 @@
+{% extends '_base.html' %}
+
+{% block title %}
+Regsitrar Producto
+{% endblock title %}
+
+{% block content %}
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+        {% endfor %}
+</ul>
+{% endif %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="container text-center pt-8">
+                <h1>Módulo de Pago</h1>
+                <div class='jumbotron'>
+                    <div class="text-left" style="max-width:500px">
+                        <form action="{% url 'payment' id_trans %}" method="post">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <input type="number" class="form-control" id="numero_tarjeta" placeholder="Número de la tarjeta" name="numero_tarjeta"
+                                min="1000000000000000" max="9999999999999999">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="nombre_tarjeta" name="nombre_tarjeta" placeholder="Nombre de la tarjeta">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="fecha_expiracion" name="fecha_expiracion" placeholder="Fecha de Expiración MM/AA"
+                                maxlength="5" minlength="5">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Código de la tarjeta"
+                                maxlength="3" minlength="3">
+                            </div>
+                            <div class="form-group col-md-9">
+                                <label>Total a pagar en Quetzales Q:{{total_q}}</label>
+                                <label>Total a pagar en Dólares $:{{trans.total}}</label>
+                                <label for="monedas">Elija la moneda a pagar:</label>
+                                <select id="moneda" name="moneda">
+                                    <option value="Dólares">Dólares</option>
+                                    <option value="Quetzales">Quetzales</option>
+                                </select>
+                            </div>
+                            <br>
+                            <button type="submit" class="btn btn-success btn-lg">Confirmar Pago</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -129,6 +129,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+ACCOUNT_FORMS = {'signup': 'users.forms.SimpleSignupForm'}
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
@@ -155,15 +156,15 @@ EMAIL_PORT=os.environ.get('EMAIL_PORT')
 
 # Django allauth config
 SITE_ID = 1
-
+LOGIN_URL = 'account_login'
 LOGIN_REDIRECT_URL = 'home'
 ACCOUNT_LOGOUT_REDIRECT='home'
 
-'''
+
 AUTHENTICATION_BACKENDS=(
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend'
-)'''
+)
 
 ACCOUNT_SESSION_REMEMBER =True
 ACCOUNT_LOGOUT_ON_GET=True

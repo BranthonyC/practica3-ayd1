@@ -1,0 +1,40 @@
+{% extends '_base.html' %}
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <h1>Historial de compras {{user}}</h1>
+    </div>
+    <div class="row">
+        <table class="table">
+        <thead>
+            <tr>
+            <th scope="col">User</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Monto</th>
+            <th scope="col">Tarjeta</th>
+            <th scope="col">Moneda</th>
+            <th scope="col">Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for compra in lista_transacciones %}
+                <tr>
+                <th scope="row">{{compra.id_user.username}}</th>
+                <td>{{compra.fecha}}</td>
+                {% for detail_item in compra.tarjeta.all %}
+                    <td>{{detail_item.monto}}</td>
+                    <td>{{detail_item}}</td>
+                    <td>{{detail_item.moneda}}</td>
+                    <td>{{detail_item.estado}}</td>
+                {% endfor %}
+                </tr>
+            {% endfor %}
+            
+        </tbody>
+        </table>
+
+    </div>
+</div>
+{% endblock content %}

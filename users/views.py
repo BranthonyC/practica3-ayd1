@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import CustomUser
-from .forms import UserForm
+from .models import CustomUser,TarjetasUsuario
+from .forms import UserForm, tarjetaForm
 from django.http import HttpResponse
 from django.views.generic import View, ListView
 from django.template.loader import get_template
@@ -9,6 +9,8 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
 from django.contrib.auth import get_user_model
 from django.contrib import messages
+import requests
+import json
 
 class UsersListView(ListView):
     model = CustomUser
@@ -65,3 +67,32 @@ def modificar_usuario(request,user):
         return redirect('mostrar_perfil')
     return render(request,'account/signup.html', {'form': form})
     
+def mis_tarjetas(request):
+    if request.method == 'GET':
+        print("holaaa")
+        tarjetas_Compradas=TarjetasUsuario.objects.filter(id_user=request.user)
+        
+        for tarjeta in tarjetas_Compradas:
+            tarjeta.img=getImageCards(tarjeta.id_tarjeta)
+        return render(request,'account/MisTarjetas.html', {'tarjetas':tarjetas_Compradas})
+
+def getImageCards(id):
+    response = requests.get('https://my-json-server.typicode.com/CoffeePaw/AyD1API/Card')
+    data=json.loads(response.text)
+    for i in data:
+        if i['id']==str(id):
+            return i['image']
+    pass
+
+def modificarUserCard(request,id):
+    tarjeta = TarjetasUsuario.objects.get(pk=id) 
+    if request.method == 'GET':
+        form = tarjetaForm(instance=tarjeta)
+        form.img = getImageCards(tarjeta.id_tarjeta)
+    else:
+        print(request.POST)
+        form2 = tarjetaForm(request.POST,instance=tarjeta)
+        if form2.is_valid():
+            form2.save()
+        return redirect('mis_tarjetas')
+    return render(request,'giftcard/regalo.html', {'form': form})

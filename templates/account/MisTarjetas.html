@@ -1,0 +1,46 @@
+
+{% extends '_base.html' %}
+
+{% block content %}
+
+<h1 style="text-align: center;">GIFT CARDS COMPRADAS - {{ user.username }}</h1>
+
+<table>
+    <table class="table table- table-dark table-hover table-sm">
+        <thead>
+
+        </thead>
+        <tbody>
+            
+            {% for card in tarjetas %}
+            <tr>
+                <td colspan="2" width="30%" style="text-align: center;">
+                    <div>
+                        <img src="{{ card.img }}" alt="Card" class="img-responsive margin" style="width:30%"
+                            alt="Image">
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <div>
+                        <h4>Tarjeta de {{card.valor_tarjeta}} dolares</h4>
+                        <h4>Tarjeta No.: {{card.alfanumerico}} </h4>
+                       <!-- <h4>{{card.id_user}}</h4> -->
+                    </div>
+                    
+                </td>
+                <td colspan="2" width="30%" style="text-align: center;">
+                    <br>
+                    <div>
+                        <!-- <button type="submit" class="btn btn-outline-info">Regalar Tarjeta</button> -->
+                        <a href="{% url 'modificarUserCard' card.id %}" class="btn btn-warning "> Regalar Tarjeta </a>
+                    </div>
+                </td>
+                
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+</table>
+{% endblock %}

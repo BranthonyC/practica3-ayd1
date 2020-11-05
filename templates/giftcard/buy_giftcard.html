@@ -1,0 +1,108 @@
+{% extends '_base.html' %}
+
+{% block content %}
+
+
+<h1 style="text-align: center;">GIFT CARDS - {{ user.username }}</h1>
+
+<table>
+    <table class="table table-striped table-dark">
+        <thead>
+
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="3" style="text-align: center;">
+                    -----------------------------------MIS COMPRAS----------------------------------------
+                </td>
+            </tr>
+            {% for carr in compra %}
+            <tr>
+                <td width="30%" style="text-align: center;">
+                    <b>Id del producto: </b>{{carr.id_card}}
+                </td>
+                <td width="30%" style="text-align: center;">
+                    <b>Cantidad: </b>{{carr.cant}}
+                </td>
+                <td width="30%" style="text-align: center;">
+                    <b>Precio: </b>{{carr.precio}}
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" style="text-align: center;">
+                    {% if activa == 1%}                    
+                    --------------------<a style="text-align: center;" href="{% url 'save_trans'  %}" class="btn btn-success">
+                        Finalizar Compra
+                    </a>---------------------
+                    {% endif %}
+                </td>
+            </tr>
+            {% for card in cards %}
+            {% if card.active %}
+            <tr>
+                <td colspan="2" width="30%" style="text-align: center;">
+                    <div>
+                        <img src="{{ card.image }}" alt="Card" class="img-responsive margin" style="width:40%"
+                            alt="Image">
+                    </div>
+                </td>
+                <td width="30%" style="text-align: center;">
+                    <div>
+                        <h1>{{ card.name }}</h1>
+                        <p>Recargo: <b>{{ card.chargeRate }}</b></p>
+                        {% if card.active %}
+                        <p>Plataforma <b>habilitada</b></p>
+                        {% else %}
+                        <p style="color: tomato;">Plataforma <b>deshabilitada</b></p>
+                        {% endif %}
+
+                        <form action="{% url 'carrito' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="form-group" style="display: none">
+                                <input type="text" class="form-control" id="names" name="names" value="{{ card.name }}">
+                            </div>
+                            <div class="form-group" style="display: none">
+                                <input type="number" class="form-control" id="id_card" name="id_card"
+                                    value="{{ card.id }}">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input min="1" type="number" class="form-control" id="cant" name="cant" placeholder="Cantidad">
+                            </div>
+                            <div class="form-group col-md-6" style="display: none">
+                                <input class="form-control" id="recargo" name="recargo" value="{{ card.chargeRate }}">
+                            </div>
+                            <div class="form-group col-md-6" style="display: none">
+                                <input type="number" class="form-control" id="id_trans" name="id_trans"
+                                    placeholder="id trans">
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="precio">Precio:</label>
+                                <select type="number" id="precio" name="precio">
+
+                                    <!--Recorriendo lista de codigos de precios-->
+                                    {% for codP in card.availability %} 
+                                        <!--Recorriendo lista de objetos de price(id,total)-->
+                                        {% for price in prices %}
+
+                                            {% if price.id|stringformat:"s" == codP|stringformat:"s" %}
+                                                <option>{{ price.total }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-outline-info">Comprar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </tbody>
+    </table>
+</table>
+
+{% endblock %}

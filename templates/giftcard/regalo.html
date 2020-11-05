@@ -1,0 +1,47 @@
+{% extends '_base.html' %}
+{% block content %}
+
+<h1 style="text-align: center;">REGALAR GIFTCARD A UN AMIGO - {{ user.username }}</h1>
+
+<form method='POST'>
+    {% csrf_token %}
+<table>
+    <table class="table table- table-dark table-hover table-sm">
+        <thead>
+
+        </thead>
+        <tbody>
+            
+            <tr>
+                <td colspan="3" width="30%" style="text-align: center;">
+                    <div>
+                        <img src="{{ form.img }}" alt="Card" class="img-responsive margin" style="width:30%"
+                            alt="Image">
+                    </div>
+                </td>
+                <td>
+                    <br>
+                    <div>
+                        <h4>Sorprende a: {{form.id_user}} </h4>
+                        
+                      
+                       <!-- <h4>{{card.id_user}}</h4> -->
+                    </div>
+                    
+                </td>
+                <td colspan="2" width="30%" style="text-align: center;">
+                    <br>
+                    <div>
+                        <!-- <button type="submit" class="btn btn-outline-info">Regalar Tarjeta</button> -->
+                        <button type="submit" class="btn btn-primary btn-block mb-5">Guardar</button>
+                    </div>
+                </td>
+                
+            </tr>
+       
+
+        </tbody>
+    </table>
+</table>
+</form>
+{% endblock content %}
