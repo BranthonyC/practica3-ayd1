@@ -1,2 +1,4 @@
 #Version 1:
 Se agregó las funciones de registro, modificación de usuario y login.
+#Version 2:
+Se agregaron las funcionalidades restantes; compras, inventario e historial de transacciones.
